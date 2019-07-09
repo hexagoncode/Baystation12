@@ -49,7 +49,7 @@
 		"nav_deck2_calypso",
 		"nav_deck2_guppy",
 		"nav_deck2_aquila",
-		
+
 		//start Forth Deck
 		"nav_merc_deck4",
 		"nav_ninja_deck4",

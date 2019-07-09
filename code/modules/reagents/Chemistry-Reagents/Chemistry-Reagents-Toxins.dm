@@ -774,7 +774,7 @@
 		M.drop_from_inventory(W)
 	var/mob/living/carbon/slime/new_mob = new /mob/living/carbon/slime(M.loc)
 	new_mob.a_intent = "hurt"
-	new_mob.universal_speak = 1
+	new_mob.universal_speak = TRUE
 	if(M.mind)
 		M.mind.transfer_to(new_mob)
 	else
@@ -882,10 +882,10 @@
 	heating_point = null
 
 /datum/reagent/toxin/methyl_bromide/affect_touch(var/mob/living/carbon/M, var/alien, var/removed)
-	. = (alien != IS_MANTID && ..())
+	. = (alien != IS_MANTID && alien != IS_NABBER && ..())
 
 /datum/reagent/toxin/methyl_bromide/affect_ingest(var/mob/living/carbon/M, var/alien, var/removed)
-	. = (alien != IS_MANTID && ..())
+	. = (alien != IS_MANTID && alien != IS_NABBER && ..())
 
 /datum/reagent/toxin/methyl_bromide/touch_turf(var/turf/simulated/T)
 	if(istype(T))
@@ -893,7 +893,7 @@
 		remove_self(volume)
 
 /datum/reagent/toxin/methyl_bromide/affect_blood(var/mob/living/carbon/M, var/alien, var/removed)
-	. = (alien != IS_MANTID && ..())
+	. = (alien != IS_MANTID && alien != IS_NABBER && ..())
 	if(istype(M))
 		for(var/obj/item/organ/external/E in M.organs)
 			if(LAZYLEN(E.implants))

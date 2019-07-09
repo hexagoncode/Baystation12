@@ -3,7 +3,7 @@
 	desc = "A computer used to control a nearby holodeck."
 	icon_keyboard = "tech_key"
 	icon_screen = "holocontrol"
-	req_access = list(access_bridge)
+	var/lock_access = list(access_bridge)
 	var/islocked = 0
 
 	active_power_usage = 8000 //8kW for the scenery + 500W per holoitem
@@ -32,13 +32,11 @@
 	if (programs_list_id in GLOB.using_map.holodeck_restricted_programs)
 		restricted_programs |= GLOB.using_map.holodeck_restricted_programs[programs_list_id]
 
-/obj/machinery/computer/HolodeckControl/attack_ai(var/mob/user as mob)
-	return src.attack_hand(user)
+/obj/machinery/computer/HolodeckControl/interface_interact(var/mob/user)
+	interact(user)
+	return TRUE
 
-/obj/machinery/computer/HolodeckControl/attack_hand(var/mob/user as mob)
-	if(..())
-		return 1
-
+/obj/machinery/computer/HolodeckControl/interact(var/mob/user)
 	user.set_machine(src)
 	var/dat
 
@@ -354,4 +352,4 @@
 		return 1
 
 /obj/machinery/computer/HolodeckControl/proc/cantogglelock(var/mob/user)
-	return allowed(user)
+	return has_access(lock_access, user.GetAccess())

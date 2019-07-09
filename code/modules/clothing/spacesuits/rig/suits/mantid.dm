@@ -1,10 +1,10 @@
 /obj/item/weapon/rig/mantid
-	name = "mantid support rig"
+	name = "alate support exosuit"
 	desc = "A powerful support exosuit with integrated power supply, weapon and atmosphere. It's closer to a mech than a rig."
 	icon_state = "kexosuit"
 	item_state = null
 	suit_type = "support exosuit"
-	armor = list(melee = 80, bullet = 80, laser = 75, energy = 50, bomb = 90, bio = 100, rad = 100)
+	armor = list(melee = 65, bullet = 65, laser = 65, energy = 55, bomb = 75, bio = 100, rad = 100)
 	online_slowdown = 0
 	offline_slowdown = 1
 	equipment_overlay_icon = null
@@ -14,6 +14,7 @@
 	helm_type =  /obj/item/clothing/head/helmet/space/rig/mantid
 	boot_type =  /obj/item/clothing/shoes/magboots/rig/mantid
 	glove_type = /obj/item/clothing/gloves/rig/mantid
+	update_visible_name = TRUE
 	icon_override = 'icons/mob/species/mantid/onmob_back_alate.dmi'
 	sprite_sheets = list(
 		SPECIES_MANTID_GYNE =  'icons/mob/species/mantid/onmob_back_gyne.dmi',
@@ -130,7 +131,9 @@
 	. = ..()
 
 /obj/item/weapon/tank/mantid/oxygen
+	name = "serpentid gas reactor"
 	refill_gas_type = "oxygen"
+	distribute_pressure = 31
 
 /obj/item/weapon/tank/mantid/Process()
 	..()
@@ -155,6 +158,8 @@
 
 // Rig definitions.
 /obj/item/weapon/rig/mantid/gyne
+	name = "gyne support exosuit"
+	armor = list(melee = 80, bullet = 80, laser = 70, energy = 45, bomb = 75, bio = 100, rad = 100)
 	icon_override = 'icons/mob/species/mantid/onmob_back_gyne.dmi'
 	mantid_caste = SPECIES_MANTID_GYNE
 	initial_modules = list(
@@ -174,11 +179,19 @@
 	)
 
 /obj/item/weapon/rig/mantid/nabber
+	name = "serpentid support exosuit"
 	icon_override = 'icons/mob/species/nabber/onmob_back_gas.dmi'
 	mantid_caste = SPECIES_NABBER
 	air_type =   /obj/item/weapon/tank/mantid/oxygen
+	chest_type = /obj/item/clothing/suit/space/rig/mantid/serpentid
+	boot_type =  null
+
+/obj/item/clothing/suit/space/rig/mantid/serpentid
+	body_parts_covered = UPPER_TORSO|LOWER_TORSO|LEGS|FEET
 
 /obj/item/weapon/rig/mantid/nabber/queen
+	name = "small support exosuit"
+	mantid_caste = SPECIES_MONARCH_QUEEN
 	initial_modules = list(
 		/obj/item/rig_module/vision/thermal,
 		/obj/item/rig_module/ai_container,
@@ -224,11 +237,10 @@
 
 /obj/item/clothing/shoes/magboots/rig/mantid
 	desc = "It's like a highly advanced forklift."
-	species_restricted = list(SPECIES_MANTID_GYNE, SPECIES_MANTID_ALATE, SPECIES_NABBER)
+	species_restricted = list(SPECIES_MANTID_GYNE, SPECIES_MANTID_ALATE)
 	sprite_sheets = list(
 		SPECIES_MANTID_GYNE =  'icons/mob/species/mantid/onmob_shoes_gyne.dmi',
-		SPECIES_MANTID_ALATE = 'icons/mob/species/mantid/onmob_shoes_alate.dmi',
-		SPECIES_NABBER =       'icons/mob/species/nabber/onmob_shoes_gas.dmi'
+		SPECIES_MANTID_ALATE = 'icons/mob/species/mantid/onmob_shoes_alate.dmi'
 		)
 
 /obj/item/clothing/gloves/rig/mantid

@@ -55,6 +55,8 @@
 			return global.SScircuit_components;
 		if("SScodex")
 			return global.SScodex;
+		if("SScuisine")
+			return global.SScuisine;
 		if("SSculture")
 			return global.SSculture;
 		if("SSdisposals")
@@ -133,6 +135,8 @@
 			return global.SSvines;
 		if("SSvote")
 			return global.SSvote;
+		if("SSwebhooks")
+			return global.SSwebhooks;
 		if("SSxenoarch")
 			return global.SSxenoarch;
 		if("Tier1Runes")
@@ -970,6 +974,8 @@
 			global.SScircuit_components=newval;
 		if("SScodex")
 			global.SScodex=newval;
+		if("SScuisine")
+			global.SScuisine=newval;
 		if("SSculture")
 			global.SSculture=newval;
 		if("SSdisposals")
@@ -1048,6 +1054,8 @@
 			global.SSvines=newval;
 		if("SSvote")
 			global.SSvote=newval;
+		if("SSwebhooks")
+			global.SSwebhooks=newval;
 		if("SSxenoarch")
 			global.SSxenoarch=newval;
 		if("Tier1Runes")
@@ -1857,6 +1865,7 @@
 	"SScircuit",
 	"SScircuit_components",
 	"SScodex",
+	"SScuisine",
 	"SSculture",
 	"SSdisposals",
 	"SSevac",
@@ -1896,6 +1905,7 @@
 	"SSturf",
 	"SSvines",
 	"SSvote",
+	"SSwebhooks",
 	"SSxenoarch",
 	"Tier1Runes",
 	"Tier2Runes",

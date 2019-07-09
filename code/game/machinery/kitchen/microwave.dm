@@ -13,10 +13,6 @@
 	var/operating = 0 // Is it on?
 	var/dirty = 0 // = {0..100} Does it need cleaning?
 	var/broken = 0 // ={0,1,2} How broken is it???
-	var/global/list/datum/recipe/available_recipes // List of the recipes you can use
-	var/global/list/acceptable_items // List of the items you can put in
-	var/global/list/acceptable_reagents // List of the reagents you can put in
-	var/global/max_n_of_items = 0
 	var/list/ingredients = list()
 
 
@@ -26,27 +22,9 @@
 *   Initialising
 ********************/
 
-/obj/machinery/microwave/New()
-	..()
+/obj/machinery/microwave/Initialize()
+	. = ..()
 	create_reagents(100)
-	if (!available_recipes)
-		available_recipes = new
-		for (var/type in (typesof(/datum/recipe)-/datum/recipe))
-			available_recipes+= new type
-		acceptable_items = new
-		acceptable_reagents = new
-		for (var/datum/recipe/recipe in available_recipes)
-			for (var/item in recipe.items)
-				acceptable_items |= item
-			for (var/reagent in recipe.reagents)
-				acceptable_reagents |= reagent
-			if (recipe.items)
-				max_n_of_items = max(max_n_of_items,recipe.items.len)
-		// This will do until I can think of a fun recipe to use dionaea in -
-		// will also allow anything using the holder item to be microwaved into
-		// impure carbon. ~Z
-		acceptable_items |= /obj/item/weapon/holder
-		acceptable_items |= /obj/item/weapon/reagent_containers/food/snacks/grown
 
 /*******************
 *   Item Adding
@@ -103,8 +81,8 @@
 		else //Otherwise bad luck!!
 			to_chat(user, "<span class='warning'>It's dirty!</span>")
 			return 1
-	else if(is_type_in_list(O,acceptable_items))
-		if (LAZYLEN(ingredients) >= max_n_of_items)
+	else if(is_type_in_list(O, SScuisine.microwave_accepts_items))
+		if (LAZYLEN(ingredients) >= SScuisine.microwave_maximum_item_storage)
 			to_chat(user, "<span class='warning'>This [src] is full of ingredients, you cannot put more.</span>")
 			return 1
 		if(istype(O, /obj/item/stack)) // This is bad, but I can't think of how to change it
@@ -131,7 +109,7 @@
 		if (!O.reagents)
 			return 1
 		for (var/datum/reagent/R in O.reagents.reagent_list)
-			if (!(R.type in acceptable_reagents))
+			if (!(R.type in SScuisine.microwave_accepts_reagents))
 				to_chat(user, "<span class='warning'>Your [O] contains components unsuitable for cookery.</span>")
 				return 1
 		return
@@ -168,15 +146,13 @@
 	..()
 	updateUsrDialog()
 
-/obj/machinery/microwave/attack_ai(mob/user as mob)
-	if(istype(user, /mob/living/silicon/robot) && Adjacent(user))
-		attack_hand(user)
+// need physical proximity for our interface.
+/obj/machinery/microwave/DefaultTopicState()
+	return GLOB.physical_state
 
-/obj/machinery/microwave/attack_hand(mob/user as mob)
-	if((. = ..()))
-		return
-	user.set_machine(src)
+/obj/machinery/microwave/interface_interact(mob/user)
 	interact(user)
+	return TRUE
 
 /*******************
 *   Microwave Menu
@@ -186,6 +162,7 @@
 	return ingredients
 
 /obj/machinery/microwave/interact(mob/user as mob) // The microwave Menu
+	user.set_machine(src)
 	var/dat = list()
 	if(src.broken > 0)
 		dat += "<TT>Bzzzzttttt</TT>"
@@ -261,7 +238,7 @@
 		stop()
 		return
 
-	var/datum/recipe/recipe = select_recipe(available_recipes,src)
+	var/datum/recipe/recipe = select_recipe(SScuisine.microwave_recipes, src)
 	var/obj/cooked
 	if (!recipe)
 		dirty += 1
@@ -302,6 +279,7 @@
 			cooked.dropInto(loc)
 			return
 		cooked = recipe.make_food(src)
+		LAZYCLEARLIST(ingredients)
 		stop()
 		if(cooked)
 			cooked.dropInto(loc)
@@ -339,7 +317,7 @@
 	src.update_icon()
 
 /obj/machinery/microwave/proc/dispose()
-	if (!LAZYLEN(ingredients) || !reagents.total_volume)
+	if (!LAZYLEN(ingredients) && !reagents.total_volume)
 		return
 	for (var/obj/O in ingredients)
 		O.dropInto(loc)

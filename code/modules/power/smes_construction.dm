@@ -59,7 +59,7 @@
 /obj/machinery/power/smes/buildable
 	var/safeties_enabled = 1 	// If 0 modifications can be done without discharging the SMES, at risk of critical failure.
 	var/failing = 0 			// If 1 critical failure has occured and SMES explosion is imminent.
-	var/datum/wires/smes/wires
+	wires = /datum/wires/smes
 	var/grounding = 1			// Cut to quickly discharge, at cost of "minor" electrical issues in output powernet.
 	var/RCon = 1				// Cut to disable AI and remote control.
 	var/RCon_tag = "NO_TAG"		// RCON tag, change to show it on SMES Remote control console.
@@ -91,7 +91,6 @@
 
 
 /obj/machinery/power/smes/buildable/Destroy()
-	QDEL_NULL(wires)
 	for(var/datum/nano_module/rcon/R in world)
 		R.FindDevices()
 	return ..()
@@ -114,27 +113,11 @@
 // Proc: attack_ai()
 // Parameters: None
 // Description: AI requires the RCON wire to be intact to operate the SMES.
-/obj/machinery/power/smes/buildable/attack_ai()
+/obj/machinery/power/smes/buildable/attack_ai(mob/user)
 	if(RCon)
 		..()
 	else // RCON wire cut
-		to_chat(usr, "<span class='warning'>Connection error: Destination Unreachable.</span>")
-
-	// Cyborgs standing next to the SMES can play with the wiring.
-	if(istype(usr, /mob/living/silicon/robot) && Adjacent(usr) && panel_open)
-		wires.Interact(usr)
-
-/obj/machinery/power/smes/buildable/Initialize()
-	. = ..()
-	wires = new /datum/wires/smes(src)
-
-// Proc: attack_hand()
-// Parameters: None
-// Description: Opens the UI as usual, and if cover is removed opens the wiring panel.
-/obj/machinery/power/smes/buildable/attack_hand()
-	..()
-	if(panel_open)
-		wires.Interact(usr)
+		to_chat(user, "<span class='warning'>Connection error: Destination Unreachable.</span>")
 
 // Proc: recalc_coils()
 // Parameters: None

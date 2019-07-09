@@ -22,8 +22,8 @@
 /atom/movable/proc/GetIdCard()
 	return null
 
-/atom/movable/proc/check_access(obj/item/I)
-	return check_access_list(I ? I.GetAccess() : list())
+/atom/movable/proc/check_access(atom/movable/A)
+	return check_access_list(A ? A.GetAccess() : list())
 
 /atom/movable/proc/check_access_list(list/L)
 	var/list/R = get_req_access()
@@ -231,8 +231,8 @@
 		if(id)
 			return id
 	var/obj/item/organ/internal/controller/controller = locate() in internal_organs
-	if(istype(controller) && controller.id_card && !controller.is_broken())
-		return controller.id_card
+	if(istype(controller))
+		return controller.GetIdCard()
 
 /mob/living/carbon/human/GetAccess()
 	. = list()
@@ -241,8 +241,8 @@
 		if(I)
 			. |= I.GetAccess()
 	var/obj/item/organ/internal/controller/controller = locate() in internal_organs
-	if(istype(controller) && controller.id_card && !controller.is_broken())
-		. |= controller.id_card.GetAccess()
+	if(istype(controller))
+		. |= controller.GetAccess()
 #undef HUMAN_ID_CARDS
 
 /mob/living/silicon/GetIdCard()

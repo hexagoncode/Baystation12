@@ -104,21 +104,14 @@
 	if(!emagged)
 		to_chat(user, "<span class='danger'>You short out the turret controls' access analysis module.</span>")
 		emagged = 1
+		req_access.Cut()
 		locked = 0
 		ailock = 0
 		return 1
 
-/obj/machinery/turretid/attack_ai(mob/user as mob)
-	if(isLocked(user))
-		return
-
+/obj/machinery/turretid/interface_interact(mob/user)
 	ui_interact(user)
-
-/obj/machinery/turretid/attack_hand(mob/user as mob)
-	if(isLocked(user))
-		return
-
-	ui_interact(user)
+	return TRUE
 
 /obj/machinery/turretid/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	var/data[0]

@@ -102,6 +102,13 @@
 	build_path = /obj/item/weapon/stock_parts/circuitboard/crew
 	sort_string = "FAGAI"
 
+/datum/design/circuit/body_scan_display
+	name = "body scanner display"
+	id = "bodyscannerdisplay"
+	req_tech = list(TECH_BIO = 2, TECH_DATA = 2)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/body_scanconsole/display
+	sort_string = "FACAJ"
+
 /datum/design/circuit/bioprinter
 	name = "bioprinter"
 	id = "bioprinter"
@@ -522,6 +529,20 @@
 	build_path = /obj/item/weapon/stock_parts/circuitboard/engine
 	sort_string = "JFAAE"
 
+/datum/design/circuit/shuttle
+	name = "basic shuttle console"
+	id = "shuttle"
+	req_tech = list(TECH_DATA = 3)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/shuttle_console
+	sort_string = "JFAAF"
+
+/datum/design/circuit/shuttle_long
+	name = "long range shuttle console"
+	id = "shuttle_long"
+	req_tech = list(TECH_DATA = 3)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/shuttle_console/explore
+	sort_string = "JFAAG"
+
 /datum/design/circuit/biogenerator
 	name = "biogenerator"
 	id = "biogenerator"
@@ -795,3 +816,11 @@
 	req_tech = list(TECH_DATA = 4, TECH_BIO = 3)
 	build_path = /obj/item/weapon/stock_parts/circuitboard/aicore
 	sort_string = "XAAAA"
+
+/datum/design/circuit/ionengine
+	name = "ion propulsion system"
+	id = "ionengine"
+	req_tech = list(TECH_BLUESPACE = 4, TECH_MATERIAL = 6)
+	materials = list(MATERIAL_GOLD = 250, MATERIAL_DIAMOND = 250, MATERIAL_URANIUM = 250, MATERIAL_PLASTIC = 1000, MATERIAL_ALUMINIUM = 1000)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/engine/ion
+	sort_string = "XAAAB"

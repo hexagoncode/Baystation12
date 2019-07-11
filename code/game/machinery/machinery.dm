@@ -42,7 +42,6 @@ Class Variables:
 	  Possible bit flags:
 		 BROKEN:1 -- Machine is broken
 		 NOPOWER:2 -- No power is being supplied to machine.
-		 POWEROFF:4 -- tbd
 		 MAINT:8 -- machine is currently under going maintenance.
 		 EMPED:16 -- temporary broken by EMP pulse
 
@@ -84,10 +83,14 @@ Class Procs:
 	name = "machinery"
 	icon = 'icons/obj/stationobjs.dmi'
 	w_class = ITEM_SIZE_NO_CONTAINER
+	layer = STRUCTURE_LAYER // Layer under items
 
 	var/stat = 0
+	var/reason_broken = 0
+	var/stat_immune = NOSCREEN | NOINPUT // The machine will never set stat to these flags.
 	var/emagged = 0
 	var/malf_upgraded = 0
+	var/datum/wires/wires //wire datum, if any. If you place a type path, it will be autoinitialized.
 	var/use_power = POWER_USE_IDLE
 		//0 = dont run the auto
 		//1 = run auto, use idle
@@ -98,7 +101,7 @@ Class Procs:
 	var/power_init_complete = FALSE // Helps with bookkeeping when initializing atoms. Don't modify.
 	var/list/component_parts           //List of component instances. Expected type: /obj/item/weapon/stock_parts
 	var/list/uncreated_component_parts = list(/obj/item/weapon/stock_parts/power/apc) //List of component paths which have delayed init. Indeces = number of components.
-	var/list/maximum_component_parts = list(/obj/item/weapon/stock_parts = 8)         //null - no max. list(type part = number max).
+	var/list/maximum_component_parts = list(/obj/item/weapon/stock_parts = 10)         //null - no max. list(type part = number max).
 	var/uid
 	var/panel_open = 0
 	var/global/gl_uid = 1
@@ -109,6 +112,7 @@ Class Procs:
 	var/operator_skill      // Machines often do all operations on Process(). This caches the user's skill while the operations are running.
 	var/base_type           // For mapped buildable types, set this to be the base type actually buildable.
 	var/id_tag              // This generic variable is to be used by mappers to give related machines a string key. In principle used by radio stock parts.
+	var/frame_type = /obj/machinery/constructable_frame/machine_frame/deconstruct // what is created when the machine is dismantled.
 
 	var/list/processing_parts // Component parts queued for processing by the machine. Expected type: /obj/item/weapon/stock_parts
 	var/processing_flags         // What is being processed
@@ -119,10 +123,15 @@ Class Procs:
 		set_dir(d)
 	START_PROCESSING_MACHINE(src, MACHINERY_PROCESS_SELF) // It's safe to remove machines from here, but only if base machinery/Process returned PROCESS_KILL.
 	SSmachines.machinery += src // All machines should remain in this list, always.
+	if(ispath(wires))
+		wires = new wires(src)
 	populate_parts(populate_parts)
 	RefreshParts()
+	power_change()
 
 /obj/machinery/Destroy()
+	if(istype(wires))
+		QDEL_NULL(wires)
 	SSmachines.machinery -= src
 	QDEL_NULL_LIST(component_parts) // Further handling is done via destroyed events.
 	STOP_PROCESSING_MACHINE(src, MACHINERY_PROCESS_ALL)
@@ -167,15 +176,31 @@ Class Procs:
 			if (prob(25))
 				qdel(src)
 
-/obj/machinery/proc/set_broken(new_state)
-	if(new_state && !(stat & BROKEN))
-		stat |= BROKEN
-		. = TRUE
-	else if(!new_state && (stat & BROKEN))
-		stat &= ~BROKEN
-		. = TRUE
-	if(.)
+/obj/machinery/proc/set_broken(new_state, cause = MACHINE_BROKEN_GENERIC)
+	if(stat_immune & BROKEN)
+		return FALSE
+	if(!new_state == !(reason_broken & cause))
+		return FALSE
+	reason_broken ^= cause
+
+	if(!reason_broken != !(stat & BROKEN))
+		stat ^= BROKEN
 		queue_icon_update()
+		return TRUE
+
+/obj/machinery/proc/set_noscreen(new_state)
+	if(stat_immune & NOSCREEN)
+		return FALSE
+	if(!new_state != !(stat & NOSCREEN))// new state is different from old
+		stat ^= NOSCREEN                // so flip it
+		return TRUE
+
+/obj/machinery/proc/set_noinput(new_state)
+	if(stat_immune & NOINPUT)
+		return FALSE
+	if(!new_state != !(stat & NOINPUT))
+		stat ^= NOINPUT
+		return TRUE
 
 /proc/is_operable(var/obj/machinery/M, var/mob/user)
 	return istype(M) && M.operable()
@@ -199,7 +224,30 @@ Class Procs:
 	if(!interact_offline && (stat & NOPOWER))
 		return STATUS_CLOSE
 
+	if(user.direct_machine_interface(src))
+		return ..()
+
+	if(stat & NOSCREEN)
+		return STATUS_CLOSE
+
+	if(stat & NOINPUT)
+		return min(..(), STATUS_UPDATE)
 	return ..()
+
+/mob/proc/direct_machine_interface(obj/machinery/machine)
+	return FALSE
+
+/mob/living/silicon/direct_machine_interface(obj/machinery/machine)
+	return TRUE
+
+/mob/observer/ghost/direct_machine_interface(obj/machinery/machine)
+	return TRUE
+
+/obj/machinery/CanUseTopicPhysical(var/mob/user)
+	if(stat & BROKEN)
+		return STATUS_CLOSE
+
+	return GLOB.physical_state.can_use_topic(nano_host(), user)
 
 /obj/machinery/CouldUseTopic(var/mob/user)
 	..()
@@ -208,34 +256,44 @@ Class Procs:
 /obj/machinery/CouldNotUseTopic(var/mob/user)
 	user.unset_machine()
 
+/obj/machinery/Topic(href, href_list, datum/topic_state/state)
+	if(href_list["mechanics_text"] && construct_state) // This is an OOC examine thing handled via Topic; specifically bypass all checks, but do nothing other than message to chat.
+		var/list/info = construct_state.mechanics_info()
+		if(info)
+			to_chat(usr, jointext(info, "<br>"))
+			return TOPIC_HANDLED
+
+	. = ..()
+	if(. == TOPIC_REFRESH)
+		updateUsrDialog() // Update legacy UIs to the extent possible.
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-/obj/machinery/attack_ai(mob/user as mob)
-	if(isrobot(user))
-		// For some reason attack_robot doesn't work
-		// This is to stop robots from using cameras to remotely control machines.
-		if(user.client && user.client.eye == user)
-			return src.attack_hand(user)
-	else
-		return src.attack_hand(user)
+/obj/machinery/attack_ai(mob/user)
+	if(CanUseTopic(user, DefaultTopicState()) > STATUS_CLOSE)
+		return interface_interact(user)
 
-/obj/machinery/attack_hand(mob/user as mob)
-	if(stat & (BROKEN|MAINT))
+/obj/machinery/attack_robot(mob/user)
+	if((. = attack_hand(user))) // This will make a physical proximity check, and allow them to deal with components and such.
+		return
+	if(CanUseTopic(user, DefaultTopicState()) > STATUS_CLOSE)
+		return interface_interact(user) // This may still work even if the physical checks fail.
+
+// After a recent rework this should mostly be safe.
+/obj/machinery/attack_ghost(mob/user)
+	interface_interact(user)
+
+// If you don't call parent in this proc, you must make all appropriate checks yourself. 
+// If you do, you must respect the return value.
+/obj/machinery/attack_hand(mob/user)
+	if((. = ..())) // Buckling, climbers; unlikely to return true.
+		return
+	if(!CanPhysicallyInteract(user))
+		return FALSE // The interactions below all assume physical access to the machine. If this is not the case, we let the machine take further action.
+	if(!user.IsAdvancedToolUser())
+		to_chat(user, "<span class='warning'>You don't have the dexterity to do this!</span>")
 		return TRUE
-	if(!interact_offline && (stat & NOPOWER))
-		return TRUE
-	if(user.lying || user.stat)
-		return 1
-	if ( ! (istype(usr, /mob/living/carbon/human) || \
-			istype(usr, /mob/living/silicon)))
-		to_chat(usr, "<span class='warning'>You don't have the dexterity to do this!</span>")
-		return 1
-/*
-	//distance checks are made by atom/proc/DblClick
-	if ((get_dist(src, user) > 1 || !istype(src.loc, /turf)) && !istype(user, /mob/living/silicon))
-		return 1
-*/
-	if (ishuman(user))
+	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(H.getBrainLoss() >= 55)
 			visible_message("<span class='warning'>[H] stares cluelessly at \the [src].</span>")
@@ -245,12 +303,33 @@ Class Procs:
 			return 1
 	if((. = component_attack_hand(user)))
 		return
-	return ..()
+	if(wires && (. = wires.Interact(user)))
+		return
+	if((. = physical_attack_hand(user)))
+		return
+	if(CanUseTopic(user, DefaultTopicState()) > STATUS_CLOSE)
+		return interface_interact(user)
+
+// If you want to have interface interactions handled for you conveniently, use this.
+// Return TRUE for handled.
+// If you perform direct interactions in here, you are responsible for ensuring that full interactivity checks have been made (i.e CanInteract).
+// The checks leading in to here only guarantee that the user should be able to view a UI.
+/obj/machinery/proc/interface_interact(user)
+	return FALSE
+
+// If you want a physical interaction which happens after all relevant checks but preempts the UI interactions, do it here.
+// Return TRUE for handled.
+/obj/machinery/proc/physical_attack_hand(user)
+	return FALSE
 
 /obj/machinery/proc/RefreshParts()
+	set_noinput(TRUE)
+	set_noscreen(TRUE)
 	for(var/thing in component_parts)
 		var/obj/item/weapon/stock_parts/part = thing
 		part.on_refresh(src)
+	var/list/missing = missing_parts()
+	set_broken(!!missing, MACHINE_BROKEN_NO_PARTS)
 
 /obj/machinery/proc/assign_uid()
 	uid = gl_uid
@@ -289,15 +368,17 @@ Class Procs:
 
 /obj/machinery/proc/dismantle()
 	playsound(loc, 'sound/items/Crowbar.ogg', 50, 1)
-	var/obj/machinery/constructable_frame/machine_frame/M = new /obj/machinery/constructable_frame/machine_frame(get_turf(src))
-	M.set_dir(src.dir)
-	M.state = 2
-	M.icon_state = "box_1"
+	var/obj/item/weapon/stock_parts/circuitboard/circuit = get_component_of_type(/obj/item/weapon/stock_parts/circuitboard)
+	if(circuit)
+		circuit.deconstruct(src)
+	new frame_type(get_turf(src), dir)
 	for(var/I in component_parts)
 		uninstall_component(I, refresh_parts = FALSE)
 	while(LAZYLEN(uncreated_component_parts))
 		var/path = uncreated_component_parts[1]
 		uninstall_component(path, refresh_parts = FALSE)
+	for(var/obj/O in src)
+		O.dropInto(loc)
 
 	qdel(src)
 	return 1
@@ -326,8 +407,22 @@ Class Procs:
 
 /obj/machinery/examine(mob/user)
 	. = ..(user)
-	if(component_parts && hasHUD(user, HUD_SCIENCE))
-		display_parts(user)
+	if(.)
+		if(component_parts && hasHUD(user, HUD_SCIENCE))
+			display_parts(user)
+		if(stat & NOSCREEN)
+			to_chat(user, "It is missing a screen, making it hard to interact with.")
+		else if(stat & NOINPUT)
+			to_chat(user, "It is missing any input device.")
+		if(construct_state && construct_state.mechanics_info())
+			to_chat(user, "It can be <a href='?src=\ref[src];mechanics_text=1'>manipulated</a> using tools.")
+		var/list/missing = missing_parts()
+		if(missing)
+			var/list/parts = list()
+			for(var/type in missing)
+				var/obj/item/fake_thing = type
+				parts += "[num2text(missing[type])] [initial(fake_thing.name)]"
+			to_chat(user, "\The [src] is missing [english_list(parts)], rendering it inoperable.")
 
 // This is really pretty crap and should be overridden for specific machines.
 /obj/machinery/water_act(var/depth)

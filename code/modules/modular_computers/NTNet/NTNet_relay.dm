@@ -9,6 +9,8 @@
 	anchored = 1
 	density = 1
 	construct_state = /decl/machine_construction/default/panel_closed
+	uncreated_component_parts = null
+	stat_immune = 0
 	var/datum/ntnet/NTNet = null // This is mostly for backwards reference and to allow varedit modifications from ingame.
 	var/enabled = 1				// Set to 0 if the relay was turned off
 	var/dos_failure = 0			// Set to 1 if the relay failed due to (D)DoS attack
@@ -70,10 +72,9 @@
 		ui.open()
 		ui.set_auto_update(1)
 
-/obj/machinery/ntnet_relay/attack_hand(var/mob/living/user)
-	if((. = component_attack_hand(user)))
-		return
+/obj/machinery/ntnet_relay/interface_interact(var/mob/living/user)
 	ui_interact(user)
+	return TRUE
 
 /obj/machinery/ntnet_relay/Topic(href, href_list)
 	if(..())

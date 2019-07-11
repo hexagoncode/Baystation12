@@ -282,8 +282,9 @@ var/list/solars_list = list()
 	density = 1
 	use_power = POWER_USE_IDLE
 	idle_power_usage = 250
-	construct_state = /decl/machine_construction/computer/built
+	construct_state = /decl/machine_construction/default/panel_closed/computer
 	base_type = /obj/machinery/power/solar_control
+	frame_type = /obj/machinery/constructable_frame/computerframe
 	var/id = 0
 	var/cdir = 0
 	var/targetdir = 0		// target angle in manual tracking (since it updates every game minute)
@@ -368,9 +369,9 @@ var/list/solars_list = list()
 		overlays += image('icons/obj/computer.dmi', "solcon-o", FLY_LAYER, angle2dir(cdir))
 	return
 
-/obj/machinery/power/solar_control/attack_hand(mob/user)
-	if(!..())
-		interact(user)
+/obj/machinery/power/solar_control/interface_interact(mob/user)
+	interact(user)
+	return TRUE
 
 /obj/machinery/power/solar_control/interact(mob/user)
 

@@ -3,7 +3,6 @@
 	icon = 'icons/obj/computer.dmi'
 	icon_keyboard = "atmos_key"
 	icon_screen = "shuttle"
-	construct_state = null
 	base_type = /obj/machinery/computer/shuttle_control
 
 	var/shuttle_tag  // Used to coordinate data in shuttle controller.
@@ -12,14 +11,9 @@
 	var/ui_template = "shuttle_control_console.tmpl"
 
 
-/obj/machinery/computer/shuttle_control/attack_hand(user as mob)
-	if(..(user))
-		return
-	if(!allowed(user))
-		to_chat(user, "<span class='warning'>Access Denied.</span>")
-		return 1
-
+/obj/machinery/computer/shuttle_control/interface_interact(mob/user)
 	ui_interact(user)
+	return TRUE
 
 /obj/machinery/computer/shuttle_control/proc/get_ui_data(var/datum/shuttle/autodock/shuttle)
 	var/shuttle_state

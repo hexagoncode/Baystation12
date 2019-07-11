@@ -666,7 +666,6 @@
 	name = "Officer's Mess"
 	icon_state = "bar"
 	sound_env = MEDIUM_SOFTFLOOR
-	req_access = list(list(access_bridge, access_kitchen))
 
 /area/command/pathfinder
 	name = "\improper Pathfinder's Office"
@@ -1060,6 +1059,14 @@
 
 /area/security/processing
 	name = "\improper Security Processing"
+	icon_state = "security"
+
+/area/security/questioning
+	name = "\improper Security Interview Room One"
+	icon_state = "security"
+
+/area/security/questioning2
+	name = "\improper Security Interview Room Two"
 	icon_state = "security"
 
 /area/security/wing

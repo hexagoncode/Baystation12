@@ -1,9 +1,9 @@
 /mob/living/simple_animal
 	name = "animal"
-	icon = 'icons/mob/animal.dmi'
+	icon = 'icons/mob/simple_animal/animal.dmi'
 	health = 20
 	maxHealth = 20
-	universal_speak = 0
+	universal_speak = FALSE
 
 	mob_bump_flag = SIMPLE_ANIMAL
 	mob_swap_flags = MONKEY|SLIME|SIMPLE_ANIMAL
@@ -33,7 +33,7 @@
 	var/response_disarm = "tries to disarm"
 	var/response_harm   = "tries to hurt"
 	var/harm_intent_damage = 3
-	var/can_escape = 0 // 'smart' simple animals such as human enemies, or things small, big, sharp or strong enough to power out of a net
+	var/can_escape = FALSE // 'smart' simple animals such as human enemies, or things small, big, sharp or strong enough to power out of a net
 
 	//Temperature effect
 	var/minbodytemp = 250
@@ -59,6 +59,7 @@
 	var/resistance		  = 0	// Damage reduction
 	var/damtype = BRUTE
 	var/defense = "melee" //what armor protects against its attacks
+	var/armor_type = /datum/extension/armor
 	var/list/natural_armor //what armor animal has
 	var/flash_vulnerability = 1 // whether or not the mob can be flashed; 0 = no, 1 = yes, 2 = very yes
 
@@ -76,7 +77,7 @@
 /mob/living/simple_animal/Initialize()
 	. = ..()
 	if(LAZYLEN(natural_armor))
-		set_extension(src, /datum/extension/armor, /datum/extension/armor, natural_armor)
+		set_extension(src, /datum/extension/armor, armor_type, natural_armor)
 
 /mob/living/simple_animal/Life()
 	. = ..()

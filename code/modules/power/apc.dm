@@ -114,7 +114,7 @@
 	var/has_electronics = 0 // 0 - none, 1 - plugged in, 2 - secured by screwdriver
 	var/beenhit = 0 // used for counting how many times it has been hit, used for Aliens at the moment
 	var/longtermpower = 10  // Counter to smooth out power state changes; do not modify.
-	var/datum/wires/apc/wires = null
+	wires = /datum/wires/apc
 	var/update_state = -1
 	var/update_overlay = -1
 	var/list/update_overlay_chan		// Used to determine if there is a change in channels
@@ -156,9 +156,6 @@
 	return amount - use_power_oneoff(amount, LOCAL)
 
 /obj/machinery/power/apc/Initialize(mapload, var/ndir, var/populate_parts = TRUE, var/building=0)
-
-	wires = new(src)
-
 	// offset 22 pixels in direction of dir
 	// this allows the APC to be embedded in a wall, yet still inside an area
 	if (building)
@@ -197,13 +194,16 @@
 	area.power_equip = 0
 	area.power_environ = 0
 	area.power_change()
-	qdel(wires)
-	wires = null
 
 	// Malf AI, removes the APC from AI's hacked APCs list.
 	if((hacker) && (hacker.hacked_apcs) && (src in hacker.hacked_apcs))
 		hacker.hacked_apcs -= src
 
+	return ..()
+
+/obj/machinery/power/apc/get_req_access()
+	if(!locked)
+		return list()
 	return ..()
 
 /obj/machinery/power/apc/proc/energy_fail(var/duration)
@@ -511,7 +511,7 @@
 		else if(hacker && !hacker.hacked_apcs_hidden)
 			to_chat(user, "<span class='warning'>Access denied.</span>")
 		else
-			if(allowed(user) && !isWireCut(APC_WIRE_IDSCAN))
+			if(has_access(req_access, user.GetAccess()) && !isWireCut(APC_WIRE_IDSCAN))
 				locked = !locked
 				to_chat(user, "You [ locked ? "lock" : "unlock"] the APC interface.")
 				update_icon()
@@ -630,7 +630,7 @@
 		if (istype(user, /mob/living/silicon))
 			return attack_robot(user)
 		if (!opened && wiresexposed && (isMultitool(W) || isWirecutter(W) || istype(W, /obj/item/device/assembly/signaler)))
-			return interact(user)
+			return wires.Interact(user)
 
 		user.visible_message("<span class='danger'>The [src.name] has been hit with the [W.name] by [user.name]!</span>", \
 			"<span class='danger'>You hit the [src.name] with your [W.name]!</span>", \
@@ -665,6 +665,7 @@
 			if (do_after(user,6,src))
 				if(prob(50))
 					emagged = 1
+					req_access.Cut()
 					locked = 0
 					to_chat(user, "<span class='notice'>You emag the APC interface.</span>")
 					update_icon()
@@ -672,10 +673,7 @@
 					to_chat(user, "<span class='warning'>You fail to [ locked ? "unlock" : "lock"] the APC interface.</span>")
 				return 1
 
-/obj/machinery/power/apc/attack_hand(mob/user)
-	if((. = ..()))
-		return
-
+/obj/machinery/power/apc/physical_attack_hand(mob/user)
 	//Human mob special interaction goes here.
 	if(istype(user,/mob/living/carbon/human))
 		var/mob/living/carbon/human/H = user
@@ -697,21 +695,11 @@
 				src.visible_message("<span class='warning'>\The [src]'s wires are shredded!</span>")
 			else
 				beenhit += 1
-			return
-	if(stat & (BROKEN|MAINT))
-		return
-	// do APC interaction
-	src.interact(user)
+			return TRUE
 
-/obj/machinery/power/apc/interact(mob/user)
-	if(!user)
-		return
-
-	if(wiresexposed && !istype(user, /mob/living/silicon/ai))
-		wires.Interact(user)
-
-	return ui_interact(user)
-
+/obj/machinery/power/apc/interface_interact(mob/user)
+	ui_interact(user)
+	return TRUE
 
 /obj/machinery/power/apc/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	if(!user)
@@ -816,23 +804,11 @@
 	return wires.IsIndexCut(wireIndex)
 
 
-/obj/machinery/power/apc/proc/can_use(mob/user as mob, var/loud = 0) //used by attack_hand() and Topic()
-	if (user.stat)
-		to_chat(user, "<span class='warning'>You must be conscious to use [src]!</span>")
-		return 0
-	if(!user.client)
-		return 0
-	if(stat & (BROKEN|MAINT))
-		return 0
-	if(!user.IsAdvancedToolUser())
-		return 0
-	if(user.restrained())
-		to_chat(user, "<span class='warning'>You must have free hands to use [src].</span>")
-		return 0
+/obj/machinery/power/apc/CanUseTopic(mob/user, datum/topic_state/state)
 	if(user.lying)
 		to_chat(user, "<span class='warning'>You must stand to use [src]!</span>")
-		return 0
-	if (istype(user, /mob/living/silicon))
+		return STATUS_CLOSE
+	if(istype(user, /mob/living/silicon))
 		var/permit = 0 // Malfunction variable. If AI hacks APC it can control it even without AI control wire.
 		var/mob/living/silicon/ai/AI = user
 		var/mob/living/silicon/robot/robot = user
@@ -843,23 +819,14 @@
 				permit = 1
 
 		if(aidisabled && !permit)
-			if(!loud)
-				to_chat(user, "<span class='danger'>\The [src] have AI control disabled!</span>")
-			return 0
-	else
-		if (!in_range(src, user) || !istype(src.loc, /turf))
-			return 0
-	var/mob/living/carbon/human/H = user
-	if (istype(H) && prob(H.getBrainLoss()))
-		to_chat(user, "<span class='danger'>You momentarily forget how to use [src].</span>")
-		return 0
-	return 1
+			return STATUS_CLOSE
+	. = ..()
+	if(user.restrained())
+		to_chat(user, "<span class='warning'>You must have free hands to use [src].</span>")
+		. = min(., STATUS_UPDATE)
 
 /obj/machinery/power/apc/Topic(href, href_list)
 	if(..())
-		return 1
-
-	if(!can_use(usr, 1))
 		return 1
 
 	if(!istype(usr, /mob/living/silicon) && (locked && !emagged))

@@ -12,9 +12,11 @@
 	anchored = 1
 	clicksound = "switch"
 	power_channel = LOCAL // Draws power from direct connections to powernets.
-	stat = BROKEN         // Should be removed if the terminals initialize fully.
 	construct_state = /decl/machine_construction/default/panel_closed
+	uncreated_component_parts = null
+	stat_immune = 0
 	stat = BROKEN         // Should be removed if the terminals initialize fully.
+	reason_broken = MACHINE_BROKEN_GENERIC
 
 	var/capacity = 5e6 // maximum charge
 	var/charge = 1e6 // actual charge
@@ -219,15 +221,9 @@
 /obj/machinery/power/smes/draw_power(var/amount)
 	return amount - use_power_oneoff(amount)
 
-/obj/machinery/power/smes/attack_ai(mob/user)
-	add_hiddenprint(user)
+/obj/machinery/power/smes/interface_interact(mob/user)
 	ui_interact(user)
-
-/obj/machinery/power/smes/attack_hand(mob/user)
-	if(component_attack_hand(user))
-		return TRUE
-	add_fingerprint(user)
-	ui_interact(user)
+	return TRUE
 
 /obj/machinery/power/smes/attackby(var/obj/item/weapon/W as obj, var/mob/user as mob)
 	if(component_attackby(W, user))

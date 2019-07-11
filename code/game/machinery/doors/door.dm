@@ -10,6 +10,7 @@
 	opacity = 1
 	density = 1
 	layer = CLOSED_DOOR_LAYER
+	interact_offline = TRUE
 
 	var/open_layer = OPEN_DOOR_LAYER
 	var/closed_layer = CLOSED_DOOR_LAYER
@@ -209,11 +210,10 @@
 	take_damage(tforce)
 	return
 
-/obj/machinery/door/attack_ai(mob/user as mob)
-	return src.attack_hand(user)
-
-/obj/machinery/door/attack_hand(mob/user as mob)
-	return src.attackby(user, user)
+// This is legacy code that should be revisited, probably by moving the bulk of the logic into here.
+/obj/machinery/door/interface_interact(user)
+	if(CanInteract(user, DefaultTopicState()))
+		return attackby(user, user)
 
 /obj/machinery/door/attack_tk(mob/user as mob)
 	if(requiresID() && !allowed(null))

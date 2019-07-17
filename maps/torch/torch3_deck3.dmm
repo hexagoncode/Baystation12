@@ -2480,7 +2480,7 @@
 /area/crew_quarters/galley)
 "fw" = (
 /obj/structure/table/marble,
-/obj/machinery/reagentgrinder,
+/obj/machinery/reagentgrinder/juicer,
 /obj/item/weapon/reagent_containers/glass/beaker{
 	pixel_x = 5
 	},
@@ -3425,6 +3425,9 @@
 	d2 = 2;
 	icon_state = "0-2"
 	},
+/obj/machinery/newscaster{
+	pixel_x = 32
+	},
 /turf/simulated/floor/tiled/dark,
 /area/chapel/office)
 "hr" = (
@@ -3568,7 +3571,7 @@
 "hD" = (
 /obj/effect/floor_decal/corner/red/diagonal,
 /obj/structure/table/marble,
-/obj/machinery/reagentgrinder,
+/obj/machinery/reagentgrinder/juicer,
 /turf/simulated/floor/tiled/dark,
 /area/vacant/mess)
 "hE" = (
@@ -9882,10 +9885,10 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/door/firedoor,
-/obj/machinery/door/airlock/glass/chaplain{
+/obj/structure/disposalpipe/segment,
+/obj/machinery/door/airlock/chaplain{
 	name = "Chapel"
 	},
-/obj/structure/disposalpipe/segment,
 /turf/simulated/floor/tiled/techfloor/grid,
 /area/chapel/main)
 "vs" = (
@@ -12398,6 +12401,10 @@
 /area/security/range)
 "BF" = (
 /obj/effect/floor_decal/spline/fancy/black,
+/obj/item/device/radio/intercom/entertainment{
+	dir = 1;
+	pixel_y = -28
+	},
 /turf/simulated/floor/wood/maple,
 /area/chapel/main)
 "BG" = (
@@ -17443,6 +17450,11 @@
 	pixel_x = 6;
 	pixel_y = 24
 	},
+/obj/item/device/radio/intercom{
+	dir = 8;
+	pixel_x = 22;
+	pixel_y = 4
+	},
 /turf/simulated/floor/carpet/purple,
 /area/chapel/office)
 "OH" = (
@@ -19066,7 +19078,9 @@
 /turf/simulated/floor/tiled/techfloor,
 /area/maintenance/thirddeck/port)
 "TR" = (
-/obj/effect/wallframe_spawn/no_grille,
+/obj/effect/wallframe_spawn/reinforced/polarized/no_grille{
+	id = "chapel_windows"
+	},
 /turf/simulated/floor/plating,
 /area/chapel/main)
 "TS" = (
@@ -20114,6 +20128,15 @@
 	icon_state = "tube1";
 	dir = 4
 	},
+/obj/machinery/button/windowtint{
+	id = "chapel_windows";
+	pixel_x = -10;
+	pixel_y = 24
+	},
+/obj/machinery/light_switch{
+	pixel_x = 24;
+	pixel_y = 18
+	},
 /turf/simulated/floor/tiled/dark,
 /area/chapel/main)
 "WU" = (
@@ -20675,7 +20698,7 @@
 /area/crew_quarters/bar)
 "Ym" = (
 /obj/structure/table/standard,
-/obj/machinery/reagentgrinder,
+/obj/machinery/reagentgrinder/juicer,
 /obj/item/weapon/reagent_containers/glass/beaker{
 	pixel_x = 5
 	},
@@ -20726,7 +20749,7 @@
 /area/engineering/engine_eva)
 "Yx" = (
 /obj/structure/table/standard,
-/obj/machinery/reagentgrinder{
+/obj/machinery/reagentgrinder/juicer{
 	pixel_y = 8
 	},
 /turf/simulated/floor/tiled/dark,

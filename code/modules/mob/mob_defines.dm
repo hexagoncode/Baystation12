@@ -30,6 +30,7 @@
 
 	var/lastKnownIP = null
 	var/computer_id = null
+	var/last_ckey
 
 	var/stat = 0 //Whether a mob is alive or dead. TODO: Move this to living - Nodrak
 
@@ -106,7 +107,7 @@
 	var/bodytemperature = 310.055	//98.7 F
 	var/default_pixel_x = 0
 	var/default_pixel_y = 0
-	var/default_pixel_z = MOB_PIXEL_Z
+	var/default_pixel_z = 0
 
 	var/shakecamera = 0
 	var/a_intent = I_HELP//Living

@@ -1102,6 +1102,16 @@
 	},
 /turf/simulated/floor/tiled/dark,
 /area/rnd/development)
+"abY" = (
+/obj/machinery/door/airlock/atmos{
+	name = "Safe Room Atmospherics"
+	},
+/obj/machinery/atmospherics/pipe/simple/hidden/cyan{
+	dir = 4;
+	icon_state = "intact"
+	},
+/turf/simulated/floor/tiled/techfloor/grid,
+/area/crew_quarters/safe_room/firstdeck)
 "abZ" = (
 /obj/machinery/atmospherics/pipe/simple/visible/fuel{
 	dir = 6
@@ -1271,6 +1281,12 @@
 	},
 /turf/simulated/floor/tiled/techfloor,
 /area/thruster/d1starboard)
+"aco" = (
+/obj/machinery/door/airlock/civilian{
+	name = "Equipment Storage"
+	},
+/turf/simulated/floor/tiled/techfloor/grid,
+/area/crew_quarters/safe_room/firstdeck)
 "acp" = (
 /obj/machinery/atmospherics/binary/passive_gate/on{
 	dir = 4;
@@ -2549,16 +2565,6 @@
 	},
 /turf/simulated/floor/reinforced,
 /area/thruster/d1starboard)
-"afB" = (
-/obj/machinery/door/airlock/atmos{
-	name = "Safe Room Atmospherics"
-	},
-/obj/machinery/atmospherics/pipe/simple/hidden/cyan{
-	dir = 4;
-	icon_state = "intact"
-	},
-/turf/space,
-/area/crew_quarters/safe_room/firstdeck)
 "afC" = (
 /obj/effect/floor_decal/techfloor{
 	icon_state = "techfloor_edges";
@@ -13527,7 +13533,6 @@
 /turf/simulated/wall/r_wall/hull,
 /area/rnd/xenobiology)
 "aUI" = (
-/obj/structure/table/standard,
 /obj/machinery/reagentgrinder,
 /obj/structure/cable/green{
 	d1 = 2;
@@ -14769,7 +14774,6 @@
 	pixel_x = 6;
 	pixel_y = -21
 	},
-/obj/structure/table/standard,
 /obj/effect/floor_decal/corner/beige/three_quarters{
 	dir = 4
 	},
@@ -15245,6 +15249,18 @@
 /obj/structure/catwalk,
 /turf/simulated/floor/plating,
 /area/maintenance/firstdeck/centralstarboard)
+"cje" = (
+/obj/machinery/firealarm{
+	dir = 8;
+	pixel_x = -24;
+	pixel_y = 0
+	},
+/obj/effect/floor_decal/corner/red{
+	icon_state = "corner_white";
+	dir = 9
+	},
+/turf/simulated/floor/tiled,
+/area/hallway/primary/firstdeck/fore)
 "ckb" = (
 /obj/machinery/door/firedoor,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
@@ -16508,6 +16524,16 @@
 	},
 /turf/simulated/floor/tiled/white,
 /area/medical/surgery)
+"dAK" = (
+/obj/effect/floor_decal/corner/red{
+	icon_state = "corner_white";
+	dir = 9
+	},
+/obj/machinery/pager/security{
+	pixel_x = -25
+	},
+/turf/simulated/floor/tiled,
+/area/hallway/primary/firstdeck/fore)
 "dBb" = (
 /obj/machinery/power/apc{
 	dir = 2;
@@ -16772,6 +16798,10 @@
 /obj/item/weapon/storage/medical_lolli_jar,
 /obj/structure/table/standard,
 /obj/item/weapon/book/manual/psionics,
+/obj/item/weapon/paper_bin{
+	pixel_x = -3;
+	pixel_y = 7
+	},
 /turf/simulated/floor/tiled/white,
 /area/medical/counselor)
 "dTb" = (
@@ -17603,16 +17633,17 @@
 /turf/simulated/floor/tiled/dark,
 /area/medical/morgue/autopsy)
 "eMg" = (
-/obj/machinery/alarm{
-	dir = 8;
-	icon_state = "alarm0";
-	pixel_x = 24
-	},
 /obj/machinery/atmospherics/unary/vent_pump/on{
 	dir = 1;
 	layer = 2.4;
 	level = 2
 	},
+/obj/structure/closet/walllocker{
+	name = "Washroom Equipment";
+	pixel_x = 28
+	},
+/obj/item/weapon/soap,
+/obj/item/weapon/storage/box/detergent,
 /turf/simulated/floor/tiled/white,
 /area/medical/washroom)
 "eNb" = (
@@ -19703,12 +19734,6 @@
 	},
 /turf/simulated/floor/tiled/monotile,
 /area/hallway/primary/firstdeck/aft)
-"hdu" = (
-/obj/effect/floor_decal/corner/red{
-	dir = 8
-	},
-/turf/simulated/floor/tiled,
-/area/hallway/primary/firstdeck/fore)
 "heb" = (
 /obj/structure/cable/green{
 	d1 = 4;
@@ -19852,11 +19877,14 @@
 	pixel_x = 0;
 	pixel_y = 0
 	},
-/obj/item/weapon/soap,
 /obj/structure/curtain/open/shower,
 /obj/machinery/firealarm{
 	dir = 8;
 	pixel_x = -24
+	},
+/obj/machinery/alarm{
+	dir = 1;
+	pixel_y = -25
 	},
 /turf/simulated/floor/tiled/white,
 /area/medical/washroom)
@@ -22661,7 +22689,6 @@
 /turf/simulated/floor/tiled,
 /area/hallway/primary/firstdeck/center)
 "kpb" = (
-/obj/structure/table/standard,
 /obj/machinery/reagentgrinder,
 /turf/simulated/floor/tiled/dark,
 /area/rnd/misc_lab)
@@ -26076,18 +26103,6 @@
 	},
 /turf/simulated/floor/tiled/white,
 /area/medical/infirmreception)
-"ouo" = (
-/obj/machinery/firealarm{
-	dir = 8;
-	pixel_x = -24;
-	pixel_y = 0
-	},
-/obj/effect/floor_decal/corner/red{
-	icon_state = "corner_white";
-	dir = 1
-	},
-/turf/simulated/floor/tiled,
-/area/hallway/primary/firstdeck/fore)
 "ouI" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/structure/cable/green{
@@ -27863,7 +27878,6 @@
 /area/rnd/research)
 "qGb" = (
 /obj/machinery/atmospherics/pipe/simple/visible/red,
-/obj/structure/table/standard,
 /obj/machinery/reagentgrinder,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
@@ -30848,12 +30862,6 @@
 	},
 /turf/simulated/open,
 /area/maintenance/firstdeck/aftport)
-"uIH" = (
-/obj/machinery/door/airlock/civilian{
-	name = "Equipment Storage"
-	},
-/turf/space,
-/area/crew_quarters/safe_room/firstdeck)
 "uJd" = (
 /obj/effect/floor_decal/corner/red/half{
 	icon_state = "bordercolorhalf";
@@ -31329,7 +31337,6 @@
 	secured_wires = 1
 	},
 /obj/machinery/door/firedoor/border_only,
-/obj/machinery/door/firedoor/border_only,
 /obj/structure/cable/green{
 	d1 = 1;
 	d2 = 2;
@@ -31338,7 +31345,7 @@
 /obj/structure/disposalpipe/segment,
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/machinery/atmospherics/pipe/simple/hidden/supply,
-/turf/simulated/wall/prepainted,
+/turf/simulated/floor/tiled/steel_ridged,
 /area/security/detectives_office)
 "vMm" = (
 /obj/structure/closet/crate,
@@ -31409,6 +31416,9 @@
 "wcQ" = (
 /obj/machinery/pager/security{
 	pixel_x = -25
+	},
+/obj/effect/floor_decal/corner/red{
+	dir = 8
 	},
 /turf/simulated/floor/tiled,
 /area/hallway/primary/firstdeck/fore)
@@ -31828,6 +31838,17 @@
 	},
 /turf/simulated/floor/plating,
 /area/security/brig)
+"xoV" = (
+/obj/effect/floor_decal/corner/red{
+	dir = 10
+	},
+/obj/machinery/firealarm{
+	dir = 1;
+	pixel_x = 0;
+	pixel_y = -24
+	},
+/turf/simulated/floor/tiled,
+/area/hallway/primary/firstdeck/fore)
 "xqk" = (
 /obj/effect/floor_decal/industrial/outline/grey,
 /obj/machinery/suit_cycler,
@@ -40199,9 +40220,9 @@ hBr
 hBr
 adK
 adK
-afB
+abY
 adK
-uIH
+aco
 adK
 vMw
 akO
@@ -42840,15 +42861,15 @@ atE
 aOJ
 aqi
 ybv
-ouo
+pIA
 wcQ
-pIA
-pIA
-hdu
+wzN
+cje
+wzN
 aqi
 wzN
 sCM
-wzN
+dAK
 aFU
 aDE
 axu
@@ -43051,7 +43072,7 @@ eUO
 aCA
 aDK
 aEO
-aFV
+xoV
 aGP
 aIc
 tTA

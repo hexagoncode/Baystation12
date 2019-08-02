@@ -39,13 +39,9 @@
 
 	update_icon()
 
-/obj/machinery/embedded_controller/attack_ai(mob/user as mob)
+/obj/machinery/embedded_controller/interface_interact(mob/user)
 	ui_interact(user)
-
-/obj/machinery/embedded_controller/attack_hand(mob/user as mob)
-	if(!user.IsAdvancedToolUser())
-		return 0
-	ui_interact(user)
+	return TRUE
 
 /obj/machinery/embedded_controller/radio
 	icon = 'icons/obj/airlock_machines.dmi'
@@ -67,7 +63,7 @@ obj/machinery/embedded_controller/radio/Destroy()
 	..()
 
 /obj/machinery/embedded_controller/radio/on_update_icon()
-	if(!on || !program)
+	if(!on || !istype(program))
 		icon_state = "airlock_control_off"
 	else if(program.memory["processing"])
 		icon_state = "airlock_control_process"

@@ -102,6 +102,13 @@
 	build_path = /obj/item/weapon/stock_parts/circuitboard/crew
 	sort_string = "FAGAI"
 
+/datum/design/circuit/body_scan_display
+	name = "body scanner display"
+	id = "bodyscannerdisplay"
+	req_tech = list(TECH_BIO = 2, TECH_DATA = 2)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/body_scanconsole/display
+	sort_string = "FACAJ"
+
 /datum/design/circuit/bioprinter
 	name = "bioprinter"
 	id = "bioprinter"
@@ -129,13 +136,6 @@
 	req_tech = list(TECH_DATA = 4)
 	build_path = /obj/item/weapon/stock_parts/circuitboard/robotics
 	sort_string = "HAAAB"
-
-/datum/design/circuit/mechacontrol
-	name = "exosuit control console"
-	id = "mechacontrol"
-	req_tech = list(TECH_DATA = 3)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha_control
-	sort_string = "HAAAC"
 
 /datum/design/circuit/rdconsole
 	name = "R&D control console"
@@ -522,6 +522,20 @@
 	build_path = /obj/item/weapon/stock_parts/circuitboard/engine
 	sort_string = "JFAAE"
 
+/datum/design/circuit/shuttle
+	name = "basic shuttle console"
+	id = "shuttle"
+	req_tech = list(TECH_DATA = 3)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/shuttle_console
+	sort_string = "JFAAF"
+
+/datum/design/circuit/shuttle_long
+	name = "long range shuttle console"
+	id = "shuttle_long"
+	req_tech = list(TECH_DATA = 3)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/shuttle_console/explore
+	sort_string = "JFAAG"
+
 /datum/design/circuit/biogenerator
 	name = "biogenerator"
 	id = "biogenerator"
@@ -577,84 +591,6 @@
 	req_tech = list(TECH_DATA = 2, TECH_COMBAT = 5, TECH_BLUESPACE = 5)
 	build_path = /obj/item/weapon/stock_parts/circuitboard/bsa
 	sort_string = "KCAAF"
-
-/datum/design/circuit/mecha
-	req_tech = list(TECH_DATA = 3)
-
-/datum/design/circuit/mecha/AssembleDesignName()
-	name = "Exosuit module circuit design ([name])"
-/datum/design/circuit/mecha/AssembleDesignDesc()
-	desc = "Allows for the construction of \a [name] module."
-
-/datum/design/circuit/mecha/ripley_main
-	name = "APLU 'Ripley' central control"
-	id = "ripley_main"
-	req_tech = list(TECH_DATA = 1)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/ripley/main
-	sort_string = "NAAAA"
-
-/datum/design/circuit/mecha/ripley_peri
-	name = "APLU 'Ripley' peripherals control"
-	id = "ripley_peri"
-	req_tech = list(TECH_DATA = 1)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/ripley/peripherals
-	sort_string = "NAAAB"
-
-/datum/design/circuit/mecha/odysseus_main
-	name = "'Odysseus' central control"
-	id = "odysseus_main"
-	req_tech = list(TECH_DATA = 3,TECH_BIO = 2)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/odysseus/main
-	sort_string = "NAABA"
-
-/datum/design/circuit/mecha/odysseus_peri
-	name = "'Odysseus' peripherals control"
-	id = "odysseus_peri"
-	req_tech = list(TECH_DATA = 3,TECH_BIO = 2)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/odysseus/peripherals
-	sort_string = "NAABB"
-
-/datum/design/circuit/mecha/gygax_main
-	name = "'Gygax' central control"
-	id = "gygax_main"
-	req_tech = list(TECH_DATA = 4)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/gygax/main
-	sort_string = "NAACA"
-
-/datum/design/circuit/mecha/gygax_peri
-	name = "'Gygax' peripherals control"
-	id = "gygax_peri"
-	req_tech = list(TECH_DATA = 4)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/gygax/peripherals
-	sort_string = "NAACB"
-
-/datum/design/circuit/mecha/gygax_targ
-	name = "'Gygax' weapon control and targeting"
-	id = "gygax_targ"
-	req_tech = list(TECH_DATA = 4, TECH_COMBAT = 2)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/gygax/targeting
-	sort_string = "NAACC"
-
-/datum/design/circuit/mecha/durand_main
-	name = "'Durand' central control"
-	id = "durand_main"
-	req_tech = list(TECH_DATA = 4)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/durand/main
-	sort_string = "NAADA"
-
-/datum/design/circuit/mecha/durand_peri
-	name = "'Durand' peripherals control"
-	id = "durand_peri"
-	req_tech = list(TECH_DATA = 4)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/durand/peripherals
-	sort_string = "NAADB"
-
-/datum/design/circuit/mecha/durand_targ
-	name = "'Durand' weapon control and targeting"
-	id = "durand_targ"
-	req_tech = list(TECH_DATA = 4, TECH_COMBAT = 2)
-	build_path = /obj/item/weapon/stock_parts/circuitboard/mecha/durand/targeting
-	sort_string = "NAADC"
 
 /datum/design/circuit/tcom
 	req_tech = list(TECH_DATA = 4, TECH_ENGINEERING = 4)
@@ -789,9 +725,24 @@
 	build_path = /obj/item/weapon/stock_parts/circuitboard/honey/seed
 	sort_string = "WAAAX"
 
+/datum/design/circuit/vending
+	name = "vending machine"
+	id = "vending"
+	req_tech = list(TECH_ENGINEERING = 2)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/vending
+	sort_string = "WAABA"
+
 /datum/design/circuit/aicore
 	name = "AI core"
 	id = "aicore"
 	req_tech = list(TECH_DATA = 4, TECH_BIO = 3)
 	build_path = /obj/item/weapon/stock_parts/circuitboard/aicore
 	sort_string = "XAAAA"
+
+/datum/design/circuit/ionengine
+	name = "ion propulsion system"
+	id = "ionengine"
+	req_tech = list(TECH_BLUESPACE = 4, TECH_MATERIAL = 6)
+	materials = list(MATERIAL_GOLD = 250, MATERIAL_DIAMOND = 250, MATERIAL_URANIUM = 250, MATERIAL_PLASTIC = 1000, MATERIAL_ALUMINIUM = 1000)
+	build_path = /obj/item/weapon/stock_parts/circuitboard/engine/ion
+	sort_string = "XAAAB"

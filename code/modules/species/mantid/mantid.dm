@@ -18,6 +18,7 @@
 	flesh_color =             "#009999"
 	hud_type =                /datum/hud_data/mantid
 	move_trail =              /obj/effect/decal/cleanable/blood/tracks/snake
+	virus_immune =            TRUE
 
 	speech_chance = 100
 	speech_sounds = list(
@@ -43,9 +44,9 @@
 	siemens_coefficient =     0
 	body_temperature =        null
 
-	breath_type =             "methyl_bromide"
-	exhale_type =             "methane"
-	poison_types =            list("phoron")
+	breath_type =             GAS_METHYL_BROMIDE
+	exhale_type =             GAS_METHANE
+	poison_types =            list(GAS_PHORON)
 
 	reagent_tag =             IS_MANTID
 	genders =                 list(MALE)
@@ -115,6 +116,9 @@
 /datum/species/mantid/post_organ_rejuvenate(var/obj/item/organ/org, var/mob/living/carbon/human/H)
 	org.status |= ORGAN_CRYSTAL
 
+/datum/species/mantid/equip_survival_gear(var/mob/living/carbon/human/H, var/extendedtank = 1)
+	return
+
 /datum/species/mantid/gyne
 
 	name =                    SPECIES_MANTID_GYNE
@@ -144,7 +148,8 @@
 	swap_flags =              ALLMOBS
 
 	override_limb_types = list(
-		BP_HEAD = /obj/item/organ/external/head/insectoid/mantid
+		BP_HEAD = /obj/item/organ/external/head/insectoid/mantid,
+		BP_GROIN = /obj/item/organ/external/groin/insectoid/mantid/gyne
 	)
 
 	descriptors = list(
@@ -158,6 +163,13 @@
 		TAG_FACTION =   FACTION_ASCENT_GYNE,
 		TAG_RELIGION =  RELIGION_KHARMAANI
 	)
+
+/datum/species/mantid/gyne/attempt_grab(var/mob/living/carbon/human/grabber, var/mob/living/target)
+	grabber.unEquip(grabber.l_hand)
+	grabber.unEquip(grabber.r_hand)
+	to_chat(grabber, SPAN_WARNING("You drop everything as you seize \the [target]!"))
+	playsound(grabber.loc, 'sound/weapons/pierce.ogg', 25, 1, -1)
+	. = ..(grabber, target, GRAB_NAB)
 
 /datum/species/mantid/gyne/New()
 	equip_adjust = list(
@@ -192,9 +204,8 @@
 /datum/species/nabber/monarch
 	name = SPECIES_MONARCH_WORKER
 	name_plural = "Monarch Serpentid Workers"
-	hud_type = /datum/hud_data/mantid //todo
+	virus_immune = TRUE
 	spawn_flags = SPECIES_IS_RESTRICTED | SPECIES_NO_FBP_CONSTRUCTION | SPECIES_NO_FBP_CHARGEN
-
 	has_organ = list(
 		BP_BRAIN =             /obj/item/organ/internal/brain/insectoid/nabber,
 		BP_EYES =              /obj/item/organ/internal/eyes/insectoid/nabber,
@@ -202,21 +213,8 @@
 		BP_HEART =             /obj/item/organ/internal/heart/open,
 		BP_LIVER =             /obj/item/organ/internal/liver/insectoid/nabber,
 		BP_STOMACH =           /obj/item/organ/internal/stomach/insectoid,
-		BP_PHORON =            /obj/item/organ/internal/phoron,
-		BP_ACETONE =           /obj/item/organ/internal/acetone,
 		BP_SYSTEM_CONTROLLER = /obj/item/organ/internal/controller
-		)
-
-	force_cultural_info = list(
-		TAG_CULTURE =   CULTURE_ASCENT,
-		TAG_HOMEWORLD = HOME_SYSTEM_KHARMAANI,
-		TAG_FACTION =   FACTION_ASCENT_SERPENTID,
-		TAG_RELIGION =  RELIGION_KHARMAANI
 	)
-
-/datum/species/nabber/monarch/queen
-	name = SPECIES_MONARCH_QUEEN
-	name_plural = "Monarch Serpentid Queens"
 
 	force_cultural_info = list(
 		TAG_CULTURE =   CULTURE_ASCENT,
@@ -227,3 +225,7 @@
 
 /datum/species/nabber/monarch/get_bodytype(var/mob/living/carbon/human/H)
 	return SPECIES_NABBER
+
+/datum/species/nabber/monarch/queen
+	name = SPECIES_MONARCH_QUEEN
+	name_plural = "Monarch Serpentid Queens"

@@ -20,6 +20,7 @@ var/list/airlock_overlays = list()
 	icon = 'icons/obj/doors/station/door.dmi'
 	icon_state = "preview"
 	power_channel = ENVIRON
+	interact_offline = FALSE
 
 	explosion_resistance = 10
 	var/aiControlDisabled = 0 //If 1, AI control is disabled until the AI hacks back in and disables the lock. If 2, the AI has bypassed the lock. If -1, the control is enabled but the AI had bypassed it earlier, so if it is disabled again the AI would have no trouble getting back in.
@@ -47,7 +48,6 @@ var/list/airlock_overlays = list()
 	var/obj/item/weapon/airlock_electronics/electronics = null
 	var/hasShocked = 0 //Prevents multiple shocks from happening
 	var/secured_wires = 0
-	var/datum/wires/airlock/wires = null
 
 	var/open_sound_powered = 'sound/machines/airlock_open.ogg'
 	var/open_sound_unpowered = 'sound/machines/airlock_open_force.ogg'
@@ -233,9 +233,6 @@ var/list/airlock_overlays = list()
 
 /obj/machinery/door/airlock/glass/civilian
 	stripe_color = COLOR_CIVIE_GREEN
-
-/obj/machinery/door/airlock/glass/chaplain
-	stripe_color = COLOR_GRAY20
 
 /obj/machinery/door/airlock/external
 	airlock_type = "External"
@@ -433,7 +430,7 @@ var/list/airlock_overlays = list()
 
 /obj/machinery/door/airlock/phoron/proc/PhoronBurn(temperature)
 	for(var/turf/simulated/floor/target_tile in range(2,loc))
-		target_tile.assume_gas("phoron", 35, 400+T0C)
+		target_tile.assume_gas(GAS_PHORON, 35, 400+T0C)
 		spawn (0) target_tile.hotspot_expose(temperature, 400)
 	for(var/turf/simulated/wall/W in range(3,src))
 		W.burn((temperature/4))//Added so that you can't set off a massive chain reaction with a small flame
@@ -804,7 +801,10 @@ About the new airlock wires panel:
 			update_icon()
 	return
 
-/obj/machinery/door/airlock/attack_ai(mob/user as mob)
+/obj/machinery/door/airlock/attack_ai(mob/user)
+	ui_interact(user)
+
+/obj/machinery/door/airlock/attack_ghost(mob/user)
 	ui_interact(user)
 
 /obj/machinery/door/airlock/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1, var/datum/topic_state/state = GLOB.default_state)
@@ -890,18 +890,11 @@ About the new airlock wires panel:
 				s.start()
 	return ..()
 
-/obj/machinery/door/airlock/attack_hand(mob/user as mob)
+/obj/machinery/door/airlock/physical_attack_hand(mob/user)
 	if(!istype(usr, /mob/living/silicon))
 		if(src.isElectrified())
 			if(src.shock(user, 100))
-				return
-
-	if(src.p_open)
-		user.set_machine(src)
-		wires.Interact(user)
-	else
-		..(user)
-	return
+				return TRUE
 
 /obj/machinery/door/airlock/CanUseTopic(var/mob/user)
 	if(operating < 0) //emagged
@@ -1397,8 +1390,6 @@ About the new airlock wires panel:
 	. = ..()
 
 /obj/machinery/door/airlock/Destroy()
-	qdel(wires)
-	wires = null
 	if(brace)
 		qdel(brace)
 	return ..()

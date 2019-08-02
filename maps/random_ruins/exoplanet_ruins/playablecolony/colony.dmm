@@ -2497,7 +2497,6 @@
 /turf/simulated/floor/tiled/techfloor,
 /area/map_template/colony/engineering)
 "eS" = (
-/obj/structure/table/steel_reinforced,
 /obj/machinery/reagentgrinder,
 /obj/item/stack/material/phoron/ten,
 /obj/effect/floor_decal/corner/paleblue{
@@ -5856,7 +5855,7 @@
 	dir = 8
 	},
 /obj/structure/table/steel_reinforced,
-/obj/machinery/reagentgrinder,
+/obj/machinery/reagentgrinder/juicer,
 /obj/item/weapon/reagent_containers/glass/beaker/large,
 /turf/simulated/floor/tiled/techfloor,
 /area/map_template/colony/hydroponics)
@@ -6241,7 +6240,7 @@
 /area/map_template/colony/mineralprocessing)
 "kN" = (
 /obj/machinery/button/crematorium{
-	id = 8;
+	id_tag = 8;
 	pixel_y = 25;
 	req_access = list()
 	},

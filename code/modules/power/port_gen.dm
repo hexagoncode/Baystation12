@@ -6,6 +6,7 @@
 	icon_state = "portgen0"
 	density = 1
 	anchored = 0
+	interact_offline = TRUE
 
 	var/active = 0
 	var/power_gen = 5000
@@ -64,12 +65,11 @@
 	else
 		icon_state = "[initial(icon_state)]on"
 
-/obj/machinery/power/port_gen/attack_hand(mob/user as mob)
-	if(..())
-		return
+/obj/machinery/power/port_gen/CanUseTopic(mob/user)
 	if(!anchored)
-		to_chat(usr, "<span class='warning'>The generator needs to be secured first.</span>")
-		return
+		to_chat(user, "<span class='warning'>The generator needs to be secured first.</span>")
+		return STATUS_CLOSE
+	return ..()
 
 /obj/machinery/power/port_gen/examine(mob/user)
 	if(!..(user,1 ))
@@ -122,6 +122,8 @@
 	power_gen = 20000			//Watts output per power_output level
 	working_sound = 'sound/machines/engine.ogg'
 	construct_state = /decl/machine_construction/default/panel_closed
+	uncreated_component_parts = null
+	stat_immune = 0
 	var/max_power_output = 5	//The maximum power setting without emagging.
 	var/max_safe_output = 4		// For UI use, maximal output that won't cause overheat.
 	var/time_per_sheet = 96		//fuel efficiency - how long 1 sheet lasts at power level 1
@@ -163,7 +165,7 @@
 /obj/machinery/power/port_gen/pacman/proc/process_exhaust()
 	var/datum/gas_mixture/environment = loc.return_air()
 	if(environment)
-		environment.adjust_gas("carbon_monoxide", 0.05*power_output)
+		environment.adjust_gas(GAS_CO, 0.05*power_output)
 
 /obj/machinery/power/port_gen/pacman/HasFuel()
 	var/needed_sheets = power_output / time_per_sheet
@@ -258,7 +260,7 @@
 	var/phoron = (sheets+sheet_left)*20
 	var/datum/gas_mixture/environment = loc.return_air()
 	if (environment)
-		environment.adjust_gas_temp("phoron", phoron/10, operating_temperature + T0C)
+		environment.adjust_gas_temp(GAS_PHORON, phoron/10, operating_temperature + T0C)
 
 	sheets = 0
 	sheet_left = 0
@@ -309,14 +311,9 @@
 		DropFuel()
 	. = ..()
 
-/obj/machinery/power/port_gen/pacman/attack_hand(mob/user as mob)
-	..()
-	if (!anchored)
-		return
+/obj/machinery/power/port_gen/pacman/interface_interact(mob/user)
 	ui_interact(user)
-
-/obj/machinery/power/port_gen/pacman/attack_ai(mob/user as mob)
-	ui_interact(user)
+	return TRUE
 
 /obj/machinery/power/port_gen/pacman/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
 	if(IsBroken())

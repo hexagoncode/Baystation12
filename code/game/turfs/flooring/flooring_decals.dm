@@ -249,6 +249,10 @@ var/list/floor_decals = list()
 /obj/effect/floor_decal/corner/green/bordercee
 	icon_state = "bordercolorcee"
 
+/obj/effect/floor_decal/corner/indigo
+	name = "indigo corner"
+	color = "#623e9e"
+
 /obj/effect/floor_decal/corner/lime
 	name = "lime corner"
 	color = COLOR_PALE_GREEN_GRAY

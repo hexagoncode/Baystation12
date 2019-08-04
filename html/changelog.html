@@ -57,6 +57,77 @@
 		-->
 		<div class="commit sansserif">
 
+			<h2 class="date">04 August 2019</h2>
+			<h3 class="author">Bxil updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Inflatables now have 1 second delay.</li>
+			</ul>
+			<h3 class="author">Chinsky updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds 'Codex' verb that shows user the 'frontpage' of codex, with links to search / index / categories.</li>
+			</ul>
+			<h3 class="author">Eonoc updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">Adds a Vox RIG. Same statline as the Industrial RIG, but with full temperature and radiation resistance. Vox had no way to scavenge radioactive or volcanic planets up until now.</li>
+				<li class="rscadd">Adds flux cannon. Essentially a Vox AEG, but with the lasers doing brute damage, and shock mode replaced by a mode that scatters low damage pellets in a burst.</li>
+				<li class="rscadd">Adds sonic cannon. A vox stun rifle, with a mode that uses up all the gun's charge to push, deafen, and dizzy an opponent. Ear protection such as helmets and earmuffs will negate the deafening, and reduce the dizziness.</li>
+				<li class="rscadd">Added the associated projectile types for both above, obviously.</li>
+				<li class="rscadd">Added two new firing sounds, spike.ogg and eLuger.ogg</li>
+				<li class="tweak">Changes spike launcher firing sound to spike.ogg</li>
+				<li class="tweak">Stealth buff to Armalis to make their large size reflected more mechanically.</li>
+				<li class="tweak">Changes the Vox species check on Vox guns to make the guns hiss and jump out of your hands.</li>
+			</ul>
+			<h3 class="author">WezYo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="rscadd">CSO now has maint access</li>
+				<li class="rscdel">Removed the discard verb from playing cards</li>
+				<li class="rscadd">Added the ability to pick a card by clicking it with an open hand</li>
+			</ul>
+			<h3 class="author">comma updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Blunt yet sufficiently strong weapons can now pop inflatables</li>
+			</ul>
+			<h3 class="author">mikomyazaki updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Yeosa unathi have correct job restrictions now.</li>
+			</ul>
+
+			<h2 class="date">03 August 2019</h2>
+			<h3 class="author">Boznar updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="maptweak">Nacelles now have air alarms, fire alarms, and fire doors.</li>
+			</ul>
+			<h3 class="author">Nirnael updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="bugfix">Fixes bug in using a new apc frame on a broken apc to repair it.</li>
+			</ul>
+			<h3 class="author">Rain7x updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Tweaks the event announcement messages to be more tone-neutral & standardizes the announcement header</li>
+			</ul>
+			<h3 class="author">WezYo updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Attaching a photo to a newscaster story will no longer remove it from your hand</li>
+			</ul>
+			<h3 class="author">afterthought2 updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">The shield generator has been reworked. It is now much more expensive to keep the shields on continuously, and for large shields it's likely not viable.</li>
+				<li class="rscadd">The shield generator now has an idle and active state (as well as the off state). In the idle state, it consumes limited power and does not generate a shield. In the active state, it consumes a lot of power and produces a shield.</li>
+				<li class="rscadd">If an idle generator is toggled on, it takes a short amount of time to spin up to active state. If an active generator is toggled to idle, it will switch to that state instantly.</li>
+				<li class="rscadd">There are several levels of idle power usage that can be selected. Higher power usage decreases the spin-up time proportionately.</li>
+				<li class="rscadd">The shield generator takes time to adjust the radius of the shield. The radius will not be adjusted while the shield is active.</li>
+				<li class="tweak">The shield generator's power storage has been vastly expanded.</li>
+				<li class="tweak">The shield generator's field integrity is now tracked separately from the power storage (it's determined by the amount of power stored, up to a threshold).</li>
+			</ul>
+			<h3 class="author">mikomyazaki updated:</h3>
+			<ul class="changes bgimages16">
+				<li class="tweak">Radiation collectors are now capped at 500kW output at 250Bq radiation. They are more efficient at lower radiation levels.</li>
+				<li class="tweak">Radiation collectors will have variable fuel usage, capping out at 250Bq radiation. Fuel usage increased significantly (1-10x depending on radiation levels)</li>
+				<li class="tweak">Radiation collectors will now break from high radiation levels (500Bq) as well as temperature, they will display a warning and play a warning sound.</li>
+				<li class="maptweak">Stowaways can no longer spawn in the incinerator room, which they cannot leave.</li>
+				<li class="bugfix">Fixes inconsistent icon names for female jumpsuit icons. Should work for rolling down / roll sleeves for all jumpsuits/suits now.</li>
+			</ul>
+
 			<h2 class="date">02 August 2019</h2>
 			<h3 class="author">CrimsonShrike updated:</h3>
 			<ul class="changes bgimages16">
@@ -954,52 +1025,6 @@
 				<li class="rscadd">Selenian exists. It is a dialect of ZAC (high cross-understanding), not money-speak. It is the language of selenians, and optional for residents of luna.</li>
 				<li class="bugfix">Having no languages at all prevents you from speaking in raw text that everyone understands.</li>
 				<li class="tweak">Chimpanzee is renamed Primitive. Subtypes of Primitive no longer exist.</li>
-			</ul>
-
-			<h2 class="date">02 June 2019</h2>
-			<h3 class="author">Atebite updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">New integrated circuit components have been added:</li>
-				<li class="rscadd">Reagent funnels - Allows you to use reagent containers such as beakers on the assembly to refill internal reagent storages</li>
-				<li class="rscadd">Reagent heaters/coolers - Heats/cools contained reagents, similar to heater/cooler pads</li>
-				<li class="rscadd">Anchoring bolts - Anchors the assembly so that it cannot be moved</li>
-				<li class="rscadd">Hatch locks - Prevents opening the assembly with screwdrivers while enabled</li>
-			</ul>
-			<h3 class="author">Spookerton updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">Resleevers and neural laces no longer exist.</li>
-			</ul>
-			<h3 class="author">babydoll updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Blobs will now additionally attempt to attack a random nearby tile, even if they aren't expanding to that tile. The core nucleus itself is particularly aggressive.</li>
-				<li class="tweak">Material coins are no longer effective weapons.</li>
-			</ul>
-			<h3 class="author">ghostsheet updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Plasma cutter can now deconstruct closet.</li>
-				<li class="tweak">Hardsuit chemical dispenser now has inaprovaline instead of tricordrazine.</li>
-				<li class="tweak">Rescue rig can now have auto-compressor hooked on the suit storage slot.</li>
-				<li class="tweak">Ninja's chemical dispenser now has dermaline instead of radium, no more radioactive super powers today.</li>
-				<li class="bugfix">Hardsuit module item will no longer be put into bags or closets.</li>
-			</ul>
-
-			<h2 class="date">01 June 2019</h2>
-			<h3 class="author">Orelbon updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscadd">Adds NanoUI interface to suit storage units.</li>
-			</ul>
-			<h3 class="author">SierraKomodo updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="rscdel">Vat-grown blanks have been removed from the SRV Petrov.</li>
-			</ul>
-			<h3 class="author">babydoll updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="tweak">Many objects that were previously rotatable with a verb are now rotated using alt-click. Any such object will report in examine that it can be rotated.</li>
-				<li class="tweak">You can now rotate vending machines with alt-click.</li>
-			</ul>
-			<h3 class="author">ghostsheet updated:</h3>
-			<ul class="changes bgimages16">
-				<li class="maptweak">The Aquila's engine room has been updated, most notably it now has a fuel pump for easy refuelling.</li>
 			</ul>
 		</div>
 

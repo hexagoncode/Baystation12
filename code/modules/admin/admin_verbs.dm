@@ -77,7 +77,6 @@ var/list/admin_verbs_admin = list(
 	/client/proc/toggleghostwriters,
 	/client/proc/toggledrones,
 	/datum/admins/proc/show_skills,
-	/client/proc/check_customitem_activity,
 	/client/proc/man_up,
 	/client/proc/global_man_up,
 	/client/proc/response_team, // Response Teams admin verb,
@@ -160,7 +159,6 @@ var/list/admin_verbs_server = list(
 	/datum/admins/proc/toggle_aliens,
 	/datum/admins/proc/toggle_space_ninja,
 	/client/proc/toggle_random_events,
-	/client/proc/check_customitem_activity,
 	/client/proc/nanomapgen_DumpImage
 	)
 var/list/admin_verbs_debug = list(
@@ -185,6 +183,7 @@ var/list/admin_verbs_debug = list(
 	/client/proc/apply_random_map,
 	/client/proc/overlay_random_map,
 	/client/proc/delete_random_map,
+	/datum/admins/proc/submerge_map,
 	/datum/admins/proc/map_template_load,
 	/datum/admins/proc/map_template_load_new_z,
 	/datum/admins/proc/map_template_upload,
@@ -205,7 +204,9 @@ var/list/admin_verbs_debug = list(
 	/client/proc/cmd_analyse_health_context,
 	/client/proc/cmd_analyse_health_panel,
 	/client/proc/visualpower,
-	/client/proc/visualpower_remove
+	/client/proc/visualpower_remove,
+	/client/proc/ping_webhook,
+	/client/proc/reload_webhooks
 	)
 
 var/list/admin_verbs_paranoid_debug = list(

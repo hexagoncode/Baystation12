@@ -1,7 +1,3 @@
-#ifndef T_BOARD
-#error T_BOARD macro is not defined but we need it!
-#endif
-
 /obj/item/weapon/stock_parts/circuitboard/recharge_station
 	name = T_BOARD("cyborg recharging station")
 	build_path = /obj/machinery/recharge_station
@@ -14,5 +10,6 @@
 	additional_spawn_components = list(
 		/obj/item/weapon/stock_parts/power/apc/buildable = 1,
 		/obj/item/weapon/stock_parts/power/battery/buildable/turbo = 1,
-		/obj/item/weapon/cell/high = 1
+		/obj/item/weapon/cell/super = 1,
+		/obj/item/weapon/stock_parts/capacitor = 2
 	)

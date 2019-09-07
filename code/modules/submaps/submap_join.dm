@@ -55,13 +55,18 @@
 		return
 
 	log_debug("Player: [joining] is now offsite rank: [job.title] ([name]), JCP:[job.current_positions], JPL:[job.total_positions]")
-	joining.mind.assigned_job = job
-	joining.mind.assigned_role = job.title
+	if(joining.mind)
+		joining.mind.assigned_job = job
+		joining.mind.assigned_role = job.title
 	joining.faction = name
 	job.current_positions++
 
 	var/mob/living/character = joining.create_character(spawn_turf)
 	if(istype(character))
+
+		var/mob/living/other_mob = job.handle_variant_join(character, job.title)
+		if(istype(other_mob))
+			character = other_mob
 
 		var/mob/living/carbon/human/user_human
 		if(ishuman(character))
@@ -78,7 +83,7 @@
 			if(spawn_in_storage)
 				for(var/datum/gear/G in spawn_in_storage)
 					G.spawn_in_storage_or_drop(user_human, user_human.client.prefs.Gear()[G.display_name])
-			equip_custom_items(user_human)
+			SScustomitems.equip_custom_items(user_human)
 
 		character.job = job.title
 		if(character.mind)
@@ -92,13 +97,6 @@
 		var/datum/job/submap/ojob = job
 		if(istype(ojob) && ojob.info)
 			to_chat(character, ojob.info)
-
-		var/mob/living/other_mob = job.handle_variant_join(character, job.title)
-		if(istype(other_mob))
-			character = other_mob
-			user_human = character
-			if(!istype(user_human))
-				user_human = null
 
 		if(user_human && user_human.disabilities & NEARSIGHTED)
 			var/equipped = user_human.equip_to_slot_or_del(new /obj/item/clothing/glasses/regular(user_human), slot_glasses)

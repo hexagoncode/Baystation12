@@ -29,6 +29,7 @@
 	. += new/datum/stack_recipe/ring(src)
 	. += new/datum/stack_recipe/clipboard(src)
 	. += new/datum/stack_recipe/urn(src)
+	. += new/datum/stack_recipe/cross(src)
 
 	if(integrity>50)
 		. += new/datum/stack_recipe/furniture/chair(src) //NOTE: the wood material has it's own special chair recipe
@@ -51,6 +52,7 @@
 		. += new/datum/stack_recipe/knife(src)
 		. += new/datum/stack_recipe/bell(src)
 		. += new/datum/stack_recipe/blade(src)
+		. += new/datum/stack_recipe/drill_head(src)
 
 /material/steel/generate_recipes(var/reinforce_material)
 	. = ..()

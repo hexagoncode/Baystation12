@@ -283,7 +283,7 @@
 			damage = 8
 			radiation -= 4 * RADIATION_SPEED_COEFFICIENT
 
-		damage = Floor(damage * (isSynthetic() ? 0.5 : species.radiation_mod))
+		damage = Floor(damage * species.get_radiation_mod(src))
 		if(damage)
 			adjustToxLoss(damage * RADIATION_SPEED_COEFFICIENT)
 			updatehealth()
@@ -618,7 +618,7 @@
 						AdjustSleeping(-1)
 				species.handle_sleeping(src)
 			if(prob(2) && is_asystole() && isSynthetic())
-				visible_message(src, "<b>[src]</b> [pick("emits low pitched whirr","beeps urgently")]")
+				visible_message("<b>[src]</b> [pick("emits low pitched whirr","beeps urgently")]")
 		//CONSCIOUS
 		else
 			set_stat(CONSCIOUS)

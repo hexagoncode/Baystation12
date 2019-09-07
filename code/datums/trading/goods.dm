@@ -72,12 +72,6 @@
 								/obj/item/weapon/stock_parts/circuitboard/telecomms                  = TRADER_BLACKLIST,
 								/obj/item/weapon/stock_parts/circuitboard/unary_atmos                = TRADER_BLACKLIST,
 								/obj/item/weapon/stock_parts/circuitboard/arcade                     = TRADER_BLACKLIST,
-								/obj/item/weapon/stock_parts/circuitboard/mecha                      = TRADER_BLACKLIST,
-								/obj/item/weapon/stock_parts/circuitboard/mecha/odysseus             = TRADER_BLACKLIST,
-								/obj/item/weapon/stock_parts/circuitboard/mecha/honker               = TRADER_BLACKLIST,
-								/obj/item/weapon/stock_parts/circuitboard/mecha/durand               = TRADER_BLACKLIST,
-								/obj/item/weapon/stock_parts/circuitboard/mecha/gygax                = TRADER_BLACKLIST,
-								/obj/item/weapon/stock_parts/circuitboard/mecha/ripley               = TRADER_BLACKLIST,
 								/obj/item/weapon/stock_parts/circuitboard/broken                     = TRADER_BLACKLIST,
 								/obj/item/stack/cable_coil                               = TRADER_SUBTYPES_ONLY,
 								/obj/item/stack/cable_coil/cyborg                        = TRADER_BLACKLIST,
@@ -252,13 +246,7 @@ Sells devices, odds and ends, and medical stuff
 	name_language = TRADER_DEFAULT_NAME
 	origin = "Robot Store"
 	possible_origins = list("AI for the Straight Guy", "Mechanical Buddies", "Bot Chop Shop", "Omni Consumer Projects")
-	possible_trading_items = list(/obj/item/weapon/secbot_assembly/ed209_assembly = TRADER_THIS_TYPE,
-								/obj/item/weapon/toolbox_tiles                    = TRADER_THIS_TYPE,
-								/obj/item/weapon/toolbox_tiles_sensor             = TRADER_THIS_TYPE,
-								/obj/item/weapon/secbot_assembly                  = TRADER_ALL,
-								/obj/item/weapon/farmbot_arm_assembly             = TRADER_THIS_TYPE,
-								/obj/item/weapon/firstaid_arm_assembly            = TRADER_THIS_TYPE,
-								/obj/item/weapon/bucket_sensor                    = TRADER_THIS_TYPE,
+	possible_trading_items = list(
 								/obj/item/device/bot_kit                          = TRADER_THIS_TYPE,
 								/obj/item/device/paicard                          = TRADER_THIS_TYPE,
 								/obj/item/weapon/aicard                           = TRADER_THIS_TYPE,

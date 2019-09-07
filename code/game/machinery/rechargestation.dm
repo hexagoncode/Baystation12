@@ -10,6 +10,8 @@
 	uncreated_component_parts = null
 	stat_immune = 0
 	construct_state = /decl/machine_construction/default/panel_closed
+
+	var/overlay_icon = 'icons/obj/objects.dmi'
 	var/mob/living/occupant = null
 	var/charging = 0
 	var/last_overlay_state
@@ -68,6 +70,10 @@
 		var/obj/item/organ/internal/cell/potato = H.internal_organs_by_name[BP_CELL]
 		if(potato)
 			target = potato.cell
+		if((!target || target.percent() > 95) && istype(H.back,/obj/item/weapon/rig))
+			var/obj/item/weapon/rig/R = H.back
+			if(R.cell && !R.cell.fully_charged())
+				target = R.cell
 
 	if(target && !target.fully_charged())
 		var/diff = min(target.maxcharge - target.charge, charging_power * CELLRATE) // Capped by charging_power / tick
@@ -156,7 +162,7 @@
 		icon_state = "borgcharger0"
 
 	last_overlay_state = overlay_state()
-	overlays = list(image('icons/obj/objects.dmi', overlay_state()))
+	overlays = list(image(overlay_icon, overlay_state()))
 
 /obj/machinery/recharge_station/Bumped(var/mob/living/silicon/robot/R)
 	go_in(R)
@@ -185,6 +191,9 @@
 		var/mob/living/carbon/human/H = M		
 		if(H.isSynthetic()) // FBPs and IPCs
 			return 1
+		if(istype(H.back,/obj/item/weapon/rig))
+			var/obj/item/weapon/rig/R = H.back
+			return R.cell
 		return H.internal_organs_by_name["cell"]
 	return 0
 
